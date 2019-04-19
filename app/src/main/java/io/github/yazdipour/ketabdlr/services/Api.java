@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
 
 public class Api {
     private Context context;
@@ -14,15 +15,35 @@ public class Api {
         this.context = context;
     }
 
-    public void request(String url, FutureCallback<String> callback) {
+    public void request(String url,
+                        FutureCallback<Response<String>> callback) {
         Ion.with(context)
                 .load(url)
                 .asString()
+                .withResponse()
                 .setCallback(callback);
     }
 
+    public void request(String url,
+                        String headerKey,
+                        String headerValue,
+                        FutureCallback<Response<String>> callback) {
+        Ion.with(context)
+                .load(url)
+                .setHeader(headerKey, headerValue)
+                .asString()
+                .withResponse()
+                .setCallback(callback);
+    }
+
+    public void request(String url,
+                        String cookie,
+                        FutureCallback<Response<String>> callback) {
+        request(url, "Cookie", cookie, callback);
+    }
+
     @SuppressLint("DefaultLocale")
-    public void getSearch(String q, int page, FutureCallback<String> callback) {
+    public void getSearch(String q, int page, FutureCallback<Response<String>> callback) {
         request(String.format("%s/search?q=%s&page=%d", BASE_URL, q, page), callback);
     }
 }

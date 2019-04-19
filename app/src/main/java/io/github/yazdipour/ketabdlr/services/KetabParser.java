@@ -30,20 +30,21 @@ public class KetabParser {
         return book;
     }
 
-    public static List<Book> BookListElementToBooks(String html) {
+    public static List<Book> BookListElementToBooks(String html, String cookie) {
         String cssSelector = "div ol div.booklist";
         List<Book> bookList = new ArrayList<>();
         for (Element element : Jsoup.parse(html).select(cssSelector))
             try {
-                bookList.add(CarouselElementToBook(element));
+                bookList.add(CarouselElementToBook(element, cookie));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         return bookList;
     }
 
-    private static Book CarouselElementToBook(Element element) {
+    private static Book CarouselElementToBook(Element element, String cookie) {
         Book book = new Book();
+        book.setCookie(cookie);
         Element a = element.getElementsByTag("a").first();
         Element img = a.getElementsByTag("img").first();
         book.setType(element.getElementsByClass("booktype").first().text());

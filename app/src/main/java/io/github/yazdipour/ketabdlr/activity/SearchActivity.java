@@ -62,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
                 View view = super.getView(position, convertView, parent);
                 TextView text1 = view.findViewById(android.R.id.text1);
                 TextView text2 = view.findViewById(android.R.id.text2);
+                text2.setMaxLines(3);
                 text2.setTextColor(Color.parseColor("#666666"));
                 try {
                     text1.setText(books.get(position).getName());
@@ -78,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
         Drawable[] array = new Drawable[]{getDrawable(R.drawable.logo_g), getDrawable(R.drawable.logo_o), getDrawable(R.drawable.logo_r), getDrawable(R.drawable.logo_b)};
         TransitionDrawable transitionDrawable = new TransitionDrawable(array);
         imageView.setImageDrawable(transitionDrawable);
-        transitionDrawable.startTransition(10000);
+        transitionDrawable.startTransition(5000);
     }
 
     private void search(String query) {
@@ -87,11 +88,12 @@ public class SearchActivity extends AppCompatActivity {
         ApiHandler.getApi(this).getSearch(query, 1, (e, result) -> {
             try {
                 if (e != null) throw e;
-                List<Book> newBooks = KetabParser.BookListElementToBooks(result);
+                List<Book> newBooks = KetabParser.BookListElementToBooks(result.getResult(),
+                        result.getRequest().getHeaders().get("Cookie"));
                 books.addAll(newBooks);
                 adapter.notifyDataSetChanged();
             } catch (Exception e1) {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchActivity.this, "Error", Toast.LENGTH_SHORT).show();
             } finally {
                 swipeRefreshLayout.setRefreshing(false);
             }

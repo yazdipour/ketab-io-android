@@ -37,6 +37,20 @@ public class Book {
     @SerializedName("file-name")
     @Expose
     private String fileName;
+    @SerializedName("cookie")
+    @Expose
+    private String cookie;
+    @SerializedName("sha1")
+    @Expose
+    private String sha1;
+
+    public String getSha1() {
+        return sha1;
+    }
+
+    public void setSha1(String sha1) {
+        this.sha1 = sha1;
+    }
 
     public String getTimeToRead() {
         return timeToRead;
@@ -119,10 +133,18 @@ public class Book {
     }
 
     public String getFileName() {
-        return fileName;
+        return String.format("%d.%s", System.currentTimeMillis(), getType());
     }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
     }
 }
