@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activity.SearchActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,10 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".activity.SearchActivity">
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp">
 
-        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+        <com.github.florent37.shapeofview.shapes.RoundRectView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
@@ -31,24 +33,25 @@
             android:elevation="8dp"
             app:shape_dot_radius="3dp"
             app:shape_dot_spacing="2dp"
-            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
-            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
-            app:shape_dottedEdgesCutCorner_topLeftSize="8dp"
-            app:shape_dottedEdgesCutCorner_topRightSize="8dp">
+            app:shape_roundRect_bottomLeftRadius="10dp"
+            app:shape_roundRect_bottomRightRadius="10dp"
+            app:shape_roundRect_topLeftRadius="10dp"
+            app:shape_roundRect_topRightRadius="10dp">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/logo_b"
                 tools:ignore="ContentDescription" />
-        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+        </com.github.florent37.shapeofview.shapes.RoundRectView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/irsans"
             android:background="#66000000"
+            android:fontFamily="@font/irsans"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -60,7 +63,9 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_margin="8dp"
-            android:background="#eee" />
+            android:background="#eee"
+            android:elevation="4dp"
+            app:iconifiedByDefault="false" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sr"

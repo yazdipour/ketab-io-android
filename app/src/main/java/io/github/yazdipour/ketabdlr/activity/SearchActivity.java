@@ -38,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         swipeRefreshLayout = findViewById(R.id.sr);
+        swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
         SearchView searchView = findViewById(R.id.sv);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -77,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
         Drawable[] array = new Drawable[]{getDrawable(R.drawable.logo_g), getDrawable(R.drawable.logo_o), getDrawable(R.drawable.logo_r), getDrawable(R.drawable.logo_b)};
         TransitionDrawable transitionDrawable = new TransitionDrawable(array);
         imageView.setImageDrawable(transitionDrawable);
-        transitionDrawable.startTransition(5000);
+        transitionDrawable.startTransition(10000);
     }
 
     private void search(String query) {
