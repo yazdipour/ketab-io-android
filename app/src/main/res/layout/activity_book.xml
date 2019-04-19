@@ -1,31 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.BookActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="back" />
-
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
-
-    <TextView
-        android:text="name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_gravity="start"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            tools:ignore="ContentDescription" />
 
-    <WebView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        <com.github.florent37.shapeofview.shapes.RoundRectView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-32dp"
+            android:elevation="4dp"
+            app:shape_roundRect_bottomLeftRadius="4dp"
+            app:shape_roundRect_bottomRightRadius="4dp"
+            app:shape_roundRect_topLeftRadius="4dp"
+            app:shape_roundRect_topRightRadius="4dp">
+
+            <ImageView
+                android:id="@+id/im_cover"
+                android:layout_width="120dp"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_b"
+                tools:ignore="ContentDescription" />
+        </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:textColor="#333"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:visibility="gone" />
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btn_dl"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/colorAccent"
+            android:drawableEnd="@drawable/ic_file_download_black_24dp"
+            android:elevation="4dp"
+            android:fontFamily="@font/irsans"
+            android:paddingStart="42dp"
+            android:paddingEnd="28dp"
+            android:text="@string/download"
+            android:textColor="@android:color/white"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="50dp"
+            app:spinning_bar_color="#FFFFFF"
+            app:spinning_bar_padding="5dp"
+            app:spinning_bar_width="5dp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableEnd="@drawable/ic_access_time_black_24dp"
+            android:drawablePadding="12dp"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:visibility="invisible" />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" />
+    </LinearLayout>
+</ScrollView>

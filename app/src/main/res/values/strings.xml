@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">KetabDlr</string>
+    <string name="app_name">رفرنس کتاب</string>
+    <string name="download">دانلود</string>
 </resources>

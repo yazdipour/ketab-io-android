@@ -79,7 +79,7 @@ public class Book {
     }
 
     public String getCover() {
-        return cover;
+        return cover != null && cover.charAt(0) == '/' ? "http:" + cover : cover;
     }
 
     public void setCover(String cover) {

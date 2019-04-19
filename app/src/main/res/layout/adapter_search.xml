@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:shape_dot_radius="3dp"
-    app:shape_dot_spacing="2dp"
-    app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
-    app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
-    app:shape_edge_position="right|left"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:orientation="vertical">
-    <LinearLayout>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
-</com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+</LinearLayout>

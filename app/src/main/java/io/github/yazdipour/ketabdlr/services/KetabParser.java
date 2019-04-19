@@ -1,7 +1,6 @@
 package io.github.yazdipour.ketabdlr.services;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
@@ -15,9 +14,19 @@ public class KetabParser {
 
     public static Book BookPageToBook(Book book, String html) {
         Element element = Jsoup.parse(html).select("div#row").first();
-        book.setTimeToRead(element.getElementsByClass("stat-desc").first().text());
+        try {
+            book.setTimeToRead(element.getElementsByClass("stat-desc").first().text());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String infoAndSum = element.getElementsByClass("tinytext").first().outerHtml() + element.getElementById("DisplayContent_1").outerHtml();
-        book.setDetails(infoAndSum.replaceAll("href=", "z="));
+        book.setDetails("<style type=\"text/css\">*{text-align: center;direction:rtl;" +
+                "font-family: MyFont;src: url(\\\"file:///android_asset/font/irsans.ttf\\\")}</style>" +
+                infoAndSum
+                        .replaceAll("<a ", "<span ")
+                        .replaceAll("</a", "</span ")
+                        .replace("دانلود نرم افزار مطالعه", "")
+                        .replace("افزودن خلاصه فارسی", ""));
         return book;
     }
 
@@ -48,7 +57,7 @@ public class KetabParser {
         }
         try {
             book.setName(img.attr("alt"));
-            book.setCover(Api.BASE_URL + img.attr("src"));
+            book.setCover(img.attr("src"));
             book.setAuthor(element.getElementsByTag("cite").first().text());
             book.setYear(element.getElementsByClass("year").first().text());
         } catch (Exception e) {

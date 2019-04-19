@@ -24,4 +24,8 @@ public class StringUtils {
         }
         return strBuild.toString();
     }
+
+    public static Boolean isNullOrEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
 }
