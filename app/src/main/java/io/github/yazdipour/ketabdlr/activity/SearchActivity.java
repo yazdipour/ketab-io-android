@@ -39,8 +39,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         swipeRefreshLayout = findViewById(R.id.sr);
         swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
-        SearchView searchView = findViewById(R.id.sv);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        ((SearchView) findViewById(R.id.sv)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (!StringUtils.isNullOrEmpty(query.trim())) search(query.trim());

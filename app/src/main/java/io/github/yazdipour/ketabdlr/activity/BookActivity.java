@@ -3,7 +3,6 @@ package io.github.yazdipour.ketabdlr.activity;
 import android.accounts.NetworkErrorException;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,15 +16,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.koushikdutta.ion.Ion;
-import com.liulishuo.okdownload.DownloadTask;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
@@ -35,31 +29,11 @@ import io.github.yazdipour.ketabdlr.services.ApiHandler;
 import io.github.yazdipour.ketabdlr.services.KetabParser;
 import io.github.yazdipour.ketabdlr.utils.FileUtils;
 import io.github.yazdipour.ketabdlr.utils.ImageUtils;
-import io.github.yazdipour.ketabdlr.utils.NotificationSampleListener;
 import io.github.yazdipour.ketabdlr.utils.PermissionUtils;
 import io.github.yazdipour.ketabdlr.utils.StringUtils;
 
 public class BookActivity extends AppCompatActivity {
     private Book book;
-    private boolean isBusy = false;
-    private DownloadTask task;
-    private NotificationSampleListener listener;
-
-    @Override
-    public void onBackPressed() {
-        if (!isBusy) finish();
-        else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("دانلود تمام نشده. آیا مایل به خروج هستید؟")
-                    .setCancelable(false)
-                    .setPositiveButton("خروج", (dialog, id) -> {
-                        finish();
-                    })
-                    .setNegativeButton("ماندن", null);
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +66,6 @@ public class BookActivity extends AppCompatActivity {
                         tv_time.setVisibility(View.VISIBLE);
                     }
                 });
-
     }
 
     private void setupUI(Book book) {
@@ -106,8 +79,11 @@ public class BookActivity extends AppCompatActivity {
             tv_year.setText(book.getYear());
         }
         Ion.with(findViewById(R.id.im_cover))
-                .placeholder(R.drawable.logo_b)
+                .placeholder(R.drawable.logo_g)
                 .error(R.drawable.logo_r)
+                .load(book.getCover());
+        Ion.with(findViewById(R.id.im_bg))
+                .fadeIn(true)
                 .load(book.getCover());
     }
 
@@ -119,8 +95,7 @@ public class BookActivity extends AppCompatActivity {
                     + "/Ketab");
             File file1 = new File(folder + "/" + book.getFileName());
             btn.startMorphAnimation();
-            isBusy = true;
-            Ion.with(this)
+            Ion.with(getApplicationContext())
                     .load(book.getDownloadUrl())
                     .setHeader("Cookie", book.getCookie())
                     .progress((downloaded, total) ->
@@ -129,75 +104,35 @@ public class BookActivity extends AppCompatActivity {
                     .setCallback((e, file) -> {
                         try {
                             if (e != null) throw new NetworkErrorException();
-                            Toast.makeText(BookActivity.this,
-                                    getString(R.string.download_successfully), Toast.LENGTH_SHORT).show();
-                            btn.doneLoadingAnimation(Color.parseColor("#A3CB38"),
-                                    ImageUtils.drawableToBitmap(getDrawable(R.drawable.ic_check_black_24dp)));
+                            Toast.makeText(BookActivity.this, getString(R.string.download_successfully), Toast.LENGTH_SHORT).show();
+                            btn.doneLoadingAnimation(Color.parseColor("#A3CB38"), ImageUtils.drawableToBitmap(getDrawable(R.drawable.ic_check_black_24dp)));
                             book.setFilePath(file.getAbsolutePath());
                             book.setSha1(FileUtils.getFileSha1(file));
-                            Intent pdfIntent = FileUtils.openPdf(BookActivity.this, file);
-                            NotificationCompat.Builder builder =
-                                    new NotificationCompat.Builder(this, "Download")
-                                            .setContentTitle(getString(R.string.download_successfully))
-                                            .setContentText(file.getCanonicalPath())
-                                            .setSmallIcon(R.drawable.logo_o)
-                                            .setAutoCancel(true)
-                                            .setContentIntent(PendingIntent.getActivity(this, 0, pdfIntent, PendingIntent.FLAG_ONE_SHOT));
+                            Intent pdfIntent = FileUtils.getPdfIntent(file);
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "Download")
+                                    .setContentTitle(getString(R.string.download_successfully))
+                                    .setContentText(file.getCanonicalPath())
+                                    .setSmallIcon(R.drawable.logo_o)
+                                    .setAutoCancel(true)
+                                    .setContentIntent(PendingIntent.getActivity(this, 0, pdfIntent, PendingIntent.FLAG_ONE_SHOT));
                             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
                                     .notify(book.getId(), builder.build());
+                            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
+                                    .setTopColorRes(R.color.success)
+                                    .setButtonsColorRes(android.R.color.white)
+                                    .setIcon(R.drawable.ic_cloud_download_black_24dp)
+                                    .setTitle(R.string.download_successfully)
+                                    .setPositiveButton("بازکردن فایل", vc -> startActivity(pdfIntent))
+                                    .setNeutralButton("بیخیال", null)
+                                    .show();
                         } catch (Exception e1) {
+                            e1.printStackTrace();
                             if (e instanceof NetworkErrorException) {
                                 btn.startMorphRevertAnimation();
                                 Toast.makeText(BookActivity.this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                             }
-                        } finally {
-                            isBusy = false;
                         }
                     });
-        }
-    }
-
-    private void initTask() {
-        File xfile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + book.getFileName());
-        Map<String, List<String>> headerMap = new HashMap<>();
-//        headerMap.put("Cookie", null);
-        task = new DownloadTask
-                .Builder(book.getDownloadUrl(), xfile)
-                .setFilename(book.getFileName())
-                .setPassIfAlreadyCompleted(false)
-                .setMinIntervalMillisCallbackProcess(80)
-                .setAutoCallbackToUIThread(false)
-                .setHeaderMapFields(headerMap)
-                .build();
-    }
-
-    private void initListener() {
-        listener = new NotificationSampleListener(this);
-        listener.attachTaskEndRunnable(() -> {
-//                actionTv.setText(R.string.start);
-//                actionView.setTag(null);
-        });
-
-        final Intent intent = new Intent(CancelReceiver.ACTION);
-        final PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        listener.setAction(new NotificationCompat.Action(0, "Cancel", cancelPendingIntent));
-        listener.initNotification();
-    }
-
-    static class CancelReceiver extends BroadcastReceiver {
-        static final String ACTION = "cancelOkdownload";
-
-        private DownloadTask task;
-
-        CancelReceiver(@NonNull DownloadTask task) {
-            this.task = task;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            this.task.cancel();
         }
     }
 }

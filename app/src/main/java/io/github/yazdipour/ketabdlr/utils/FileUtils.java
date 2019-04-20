@@ -1,6 +1,5 @@
 package io.github.yazdipour.ketabdlr.utils;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -13,10 +12,9 @@ import java.util.Formatter;
 
 public class FileUtils {
 
-    public static Intent openPdf(Context context, File file) {
+    public static Intent getPdfIntent(File file) {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        context.startActivity(intent);
         return intent;
     }
 
