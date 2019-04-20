@@ -3,4 +3,6 @@
     <string name="download">دانلود</string>
     <string name="download_successfully">دانلود با موفقیت انجام شد</string>
     <string name="error">خطا</string>
+    <string name="beta">نسخه آزمایشی</string>
+    <string name="tv_home_empty">کتاب مورد نظر خود را جستجو کنید</string>
 </resources>

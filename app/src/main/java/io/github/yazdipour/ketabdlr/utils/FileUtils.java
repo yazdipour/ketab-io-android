@@ -13,10 +13,11 @@ import java.util.Formatter;
 
 public class FileUtils {
 
-    public static void openPdf(Context context, File file) {
+    public static Intent openPdf(Context context, File file) {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(file), "application/pdf");
         context.startActivity(intent);
+        return intent;
     }
 
     public static String getFileSha1(final File file) throws Exception {

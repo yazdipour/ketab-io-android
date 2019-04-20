@@ -1,5 +1,7 @@
 package io.github.yazdipour.ketabdlr.models;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -34,15 +36,23 @@ public class Book {
     @SerializedName("time-to-read")
     @Expose
     private String timeToRead;
-    @SerializedName("file-name")
+    @SerializedName("file-path")
     @Expose
-    private String fileName;
+    private String filePath;
     @SerializedName("cookie")
     @Expose
     private String cookie;
     @SerializedName("sha1")
     @Expose
     private String sha1;
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
     public String getSha1() {
         return sha1;
@@ -132,12 +142,13 @@ public class Book {
         return "https://www.amazon.com/s?k=";
     }
 
+    @SuppressLint("DefaultLocale")
     public String getFileName() {
-        return String.format("%d.%s", System.currentTimeMillis(), getType());
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+        try {
+            return String.format("%s.%s", getName().replaceAll("\\W+", "_"), getType());
+        } catch (Exception e) {
+            return String.format("%d.%s", System.currentTimeMillis(), getType());
+        }
     }
 
     public String getCookie() {
