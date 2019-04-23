@@ -12,7 +12,7 @@ import io.github.yazdipour.ketabdlr.models.Book;
 
 public class KetabParser {
 
-    public static Book BookPageToBook(Book book, String html) {
+    public static void BookPageToBook(Book book, String html) {
         Element element = Jsoup.parse(html).select("div#row").first();
         try {
             book.setTimeToRead(element.getElementsByClass("stat-desc").first().text());
@@ -27,7 +27,6 @@ public class KetabParser {
                         .replaceAll("</a", "</span ")
                         .replace("دانلود نرم افزار مطالعه", "")
                         .replace("افزودن خلاصه فارسی", ""));
-        return book;
     }
 
     public static List<Book> BookListElementToBooks(String html, String cookie) {

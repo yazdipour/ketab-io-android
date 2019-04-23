@@ -11,12 +11,12 @@ public class Api {
     private Context context;
     public static final String BASE_URL = "https://ketab.io";
 
-    public Api(Context context) {
+    Api(Context context) {
         this.context = context;
     }
 
-    public void request(String url,
-                        FutureCallback<Response<String>> callback) {
+    private void request(String url,
+                         FutureCallback<Response<String>> callback) {
         Ion.with(context)
                 .load(url)
                 .asString()
@@ -24,10 +24,10 @@ public class Api {
                 .setCallback(callback);
     }
 
-    public void request(String url,
-                        String headerKey,
-                        String headerValue,
-                        FutureCallback<Response<String>> callback) {
+    private void request(String url,
+                         String headerKey,
+                         String headerValue,
+                         FutureCallback<Response<String>> callback) {
         Ion.with(context)
                 .load(url)
                 .setHeader(headerKey, headerValue)

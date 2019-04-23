@@ -82,7 +82,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void search(String query) {
-        findViewById(R.id.tv_empty).setVisibility(View.GONE);
         books.clear();
         swipeRefreshLayout.setRefreshing(true);
         ApiHandler.getApi(this).getSearch(query, 1, (e, result) -> {
@@ -102,8 +101,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void openBookActivity(int position) {
         Intent i = new Intent(this, BookActivity.class);
-        String data = new Gson().toJson(books.get(position));
-        i.putExtra("data", data);
+        i.putExtra("data", new Gson().toJson(books.get(position)));
         startActivity(i);
     }
 }

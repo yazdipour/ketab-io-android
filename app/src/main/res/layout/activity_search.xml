@@ -6,27 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activity.SearchActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="8dp"
-        android:background="#EE5A24"
-        android:fontFamily="@font/irsans"
-        android:padding="4dp"
-        android:text="@string/beta"
-        android:textColor="@android:color/white" />
-
-    <TextView
-        android:id="@+id/tv_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/irsans"
-        android:padding="4dp"
-        android:text="@string/tv_home_empty" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,38 +14,45 @@
         android:paddingTop="16dp"
         android:paddingEnd="16dp">
 
-        <com.github.florent37.shapeofview.shapes.RoundRectView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:elevation="8dp"
-            app:shape_dot_radius="3dp"
-            app:shape_dot_spacing="2dp"
-            app:shape_roundRect_bottomLeftRadius="10dp"
-            app:shape_roundRect_bottomRightRadius="10dp"
-            app:shape_roundRect_topLeftRadius="10dp"
-            app:shape_roundRect_topRightRadius="10dp">
+        <LinearLayout
+            android:layoutDirection="rtl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView"
+
+            <com.github.florent37.shapeofview.shapes.RoundRectView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="8dp"
+                app:shape_dot_radius="3dp"
+                app:shape_dot_spacing="2dp"
+                app:shape_roundRect_bottomLeftRadius="10dp"
+                app:shape_roundRect_bottomRightRadius="10dp"
+                app:shape_roundRect_topLeftRadius="10dp"
+                app:shape_roundRect_topRightRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo_b"
+                    tools:ignore="ContentDescription" />
+            </com.github.florent37.shapeofview.shapes.RoundRectView>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/logo_b"
-                tools:ignore="ContentDescription" />
-        </com.github.florent37.shapeofview.shapes.RoundRectView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#66000000"
-            android:fontFamily="@font/irsans"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/irsans"
+                android:maxWidth="140dp"
+                android:text="@string/app_name"
+                android:textColor="@android:color/black"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/sv"
@@ -74,7 +60,6 @@
             android:layout_height="48dp"
             android:layout_margin="8dp"
             android:background="#eee"
-            android:elevation="4dp"
             app:queryHint="a brief history of time"
             app:iconifiedByDefault="false" />
 
@@ -87,27 +72,6 @@
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-            <!--<androidx.recyclerview.widget.RecyclerView-->
-            <!--android:id="@+id/rv"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:clipToPadding="false"-->
-            <!--app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
-
-    <com.github.florent37.shapeofview.shapes.DiagonalView
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:elevation="-1dp"
-        app:shape_diagonal_angle="5"
-        app:shape_diagonal_position="bottom">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/header_blur"
-            tools:ignore="ContentDescription" />
-    </com.github.florent37.shapeofview.shapes.DiagonalView>
 </FrameLayout>

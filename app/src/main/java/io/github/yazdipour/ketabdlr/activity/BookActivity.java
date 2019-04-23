@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.koushikdutta.ion.Ion;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import java.io.File;
 
@@ -69,7 +68,6 @@ public class BookActivity extends AppCompatActivity {
     }
 
     private void setupUI(Book book) {
-        findViewById(R.id.btn_back).setOnClickListener(v -> onBackPressed());
         findViewById(R.id.btn_dl).setOnClickListener(v -> startDownload(v, book));
         ((TextView) findViewById(R.id.tv_title)).setText(book.getName());
         ((TextView) findViewById(R.id.tv_author)).setText(book.getAuthor());
@@ -117,14 +115,7 @@ public class BookActivity extends AppCompatActivity {
                                     .setContentIntent(PendingIntent.getActivity(this, 0, pdfIntent, PendingIntent.FLAG_ONE_SHOT));
                             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
                                     .notify(book.getId(), builder.build());
-                            new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                                    .setTopColorRes(R.color.success)
-                                    .setButtonsColorRes(android.R.color.white)
-                                    .setIcon(R.drawable.ic_cloud_download_black_24dp)
-                                    .setTitle(R.string.download_successfully)
-                                    .setPositiveButton("بازکردن فایل", vc -> startActivity(pdfIntent))
-                                    .setNeutralButton("بیخیال", null)
-                                    .show();
+                            startActivity(pdfIntent);
                         } catch (Exception e1) {
                             e1.printStackTrace();
                             if (e instanceof NetworkErrorException) {
