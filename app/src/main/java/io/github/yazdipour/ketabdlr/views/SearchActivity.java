@@ -1,6 +1,5 @@
-package io.github.yazdipour.ketabdlr.activity;
+package io.github.yazdipour.ketabdlr.views;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -11,12 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,14 +19,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import io.github.yazdipour.ketabdlr.R;
 import io.github.yazdipour.ketabdlr.models.Book;
-import io.github.yazdipour.ketabdlr.services.ApiHandler;
-import io.github.yazdipour.ketabdlr.services.KetabParser;
 import io.github.yazdipour.ketabdlr.utils.StringUtils;
+import io.github.yazdipour.ketabdlr.viewmodels.SearchViewModel;
 
 public class SearchActivity extends AppCompatActivity {
-    private List<Book> books = new ArrayList<>();
     private ArrayAdapter<Book> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private SearchViewModel vm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +33,16 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         swipeRefreshLayout = findViewById(R.id.sr);
         swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
+        vm = new SearchViewModel(this);
         ((SearchView) findViewById(R.id.sv)).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (!StringUtils.isNullOrEmpty(query.trim())) search(query.trim());
+                try {
+                    if (!StringUtils.isNullOrEmpty(query.trim()))
+                        vm.search(query.trim(), adapter, swipeRefreshLayout);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
 
@@ -54,7 +54,7 @@ public class SearchActivity extends AppCompatActivity {
         //setup Recycler view
         ListView recyclerView = findViewById(R.id.rv);
         adapter = new ArrayAdapter<Book>(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1, books) {
+                android.R.layout.simple_list_item_2, android.R.id.text1, vm.books) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -64,14 +64,14 @@ public class SearchActivity extends AppCompatActivity {
                 text2.setMaxLines(3);
                 text2.setTextColor(Color.parseColor("#666666"));
                 try {
-                    text1.setText(books.get(position).getName());
-                    text2.setText(books.get(position).getAuthor());
+                    text1.setText(vm.books.get(position).getName());
+                    text2.setText(vm.books.get(position).getAuthor());
                 } catch (Exception ignored) {
                 }
                 return view;
             }
         };
-        recyclerView.setOnItemClickListener((parent, view, position, id) -> openBookActivity(position));
+        recyclerView.setOnItemClickListener((parent, view, position, id) -> vm.openBookActivity(position));
         recyclerView.setAdapter(adapter);
         //setup image view
         ImageView imageView = findViewById(R.id.imageView);
@@ -79,29 +79,5 @@ public class SearchActivity extends AppCompatActivity {
         TransitionDrawable transitionDrawable = new TransitionDrawable(array);
         imageView.setImageDrawable(transitionDrawable);
         transitionDrawable.startTransition(5000);
-    }
-
-    private void search(String query) {
-        books.clear();
-        swipeRefreshLayout.setRefreshing(true);
-        ApiHandler.getApi(this).getSearch(query, 1, (e, result) -> {
-            try {
-                if (e != null) throw e;
-                List<Book> newBooks = KetabParser.BookListElementToBooks(result.getResult(),
-                        result.getRequest().getHeaders().get("Cookie"));
-                books.addAll(newBooks);
-                adapter.notifyDataSetChanged();
-            } catch (Exception e1) {
-                Toast.makeText(SearchActivity.this, "Error", Toast.LENGTH_SHORT).show();
-            } finally {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
-
-    private void openBookActivity(int position) {
-        Intent i = new Intent(this, BookActivity.class);
-        i.putExtra("data", new Gson().toJson(books.get(position)));
-        startActivity(i);
     }
 }

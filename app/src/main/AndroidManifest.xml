@@ -16,11 +16,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.BookActivity"
+            android:name=".views.BookActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".activity.SearchActivity" />
+            android:parentActivityName=".views.SearchActivity" />
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".views.SearchActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
