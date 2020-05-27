@@ -1,4 +1,4 @@
-# Keta.io Downloader
+# Ketab.io Downloader
 
 <img src="assets\Logo\logo_g.jpg" width="100">
 
