@@ -12,7 +12,7 @@ Mini android application, build for fun in a couple of hours.
 * Search for a book
 * And then download it in PDF or EPUB
 
-### What code do
+### What the code does
 
 * Crawl for the Search page and the book page from ketab.io
 * Bypass restrictions from ketab.io
